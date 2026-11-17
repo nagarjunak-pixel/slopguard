@@ -10,6 +10,8 @@ AI coding agents ship diffs faster than reviewers can spot subtle failure modes:
 
 ---
 
+![slopguard Audit Console](docs/assets/workbench-preview.png)
+
 ## Architecture
 
 ```mermaid
