@@ -10,7 +10,7 @@ AI coding agents can produce diffs faster than reviewers can spot recurring fail
 
 ---
 
-![slopguard Audit Console](docs/assets/workbench-preview.png)
+![slopguard Audit Console](https://raw.githubusercontent.com/nagarjunak-pixel/slopguard/main/docs/assets/workbench-preview.png)
 
 ## Architecture
 
@@ -127,7 +127,7 @@ See [ADR 0001](docs/adr/0001-hybrid-cpp20-prescreener-and-ast-verifier.md) for t
 
 ---
 
-## Author, LinkedIn & Enterprise AI Architecture Hub
+## Author & Links
 Built by **[Nagarjuna Reddy Kamireddy](https://nagarjunak-pixel.github.io/)** (*Nagarjuna Kamireddy / Nagarjuna K*) — Lead AI Architect | Production Agentic AI, Hybrid RAG & LLM Evals (750K+ Workflows/Yr) | Ex-John Deere, GSK, Deloitte | AWS SA Pro & NVIDIA Agentic AI Certified.
 
 - **Official LinkedIn & Daily Newsletter:** [linkedin.com/in/nagarjuna-kamireddy](https://www.linkedin.com/in/nagarjuna-kamireddy/) · [Autonomous SAP & Enterprise AI Newsletter](https://www.linkedin.com/newsletters/autonomous-sap-enterprise-ai-7528104436112441348/)
