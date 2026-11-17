@@ -13,7 +13,7 @@ from slopguard.types import GateVerdict
 
 
 def _compile_native_lib() -> tuple[ctypes.CDLL | None, str]:
-    src_path = Path(__file__).resolve().parents[3] / "csrc" / "slopguard_kernels.cpp"
+    src_path = Path(__file__).resolve().parents[1] / "_csrc" / "slopguard_kernels.cpp"
     clang = shutil.which("clang++") or shutil.which("g++")
     if not src_path.exists() or clang is None:
         return None, "python-fallback"

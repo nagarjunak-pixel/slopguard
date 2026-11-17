@@ -5,10 +5,27 @@ build-backend = "hatchling.build"
 [project]
 name = "slopguard"
 version = "1.0.0"
-description = "Sub-Second AI Code & UI Anti-Slop Verifier: C++20 Byte Prescreener, Python AST & TS Slop Gate, Claude Code Hooks & Drop-In MCP Server"
+description = "Heuristic checker for AI-generated code — Python AST + regex TS/JSX rules for stubs, unresolved imports, empty tests; C++20 prescreen, Claude Code hook, MCP"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.12"
+keywords = ["llm", "ai-agents", "code-quality", "static-analysis", "linter", "mcp", "claude-code", "ai-generated-code"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C++",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
 authors = [
     { name = "Nagarjuna Kamireddy", email = "sendemailtonagarjuna@gmail.com" },
 ]
@@ -20,6 +37,12 @@ dependencies = [
     "typer>=0.15.0",
     "uvicorn>=0.34.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/nagarjunak-pixel/slopguard"
+Repository = "https://github.com/nagarjunak-pixel/slopguard"
+Issues = "https://github.com/nagarjunak-pixel/slopguard/issues"
+Changelog = "https://github.com/nagarjunak-pixel/slopguard/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
@@ -36,6 +59,16 @@ slopguard = "slopguard.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/slopguard"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/slopguard",
+    "tests",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "pyproject.toml",
+]
 
 [tool.ruff]
 line-length = 100

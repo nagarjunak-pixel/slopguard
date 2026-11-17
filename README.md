@@ -4,9 +4,9 @@
 [![Release v1.0.0](https://img.shields.io/badge/release-v1.0.0-10b981)](https://github.com/nagarjunak-pixel/slopguard/releases/tag/v1.0.0)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Sub-Second AI Code & UI Anti-Slop Verifier: Native `C++20` Byte Prescreener, Python AST & TypeScript/JSX Slop Gate, Claude Code Hook (`PostToolUse` exit-2 auto-repair loop), and Drop-In MCP Server.**
+**A fast, heuristic checker for common failure patterns in AI-generated code: Python AST rules, regex-based TypeScript/JSX rules, a C++20 byte prescreener and risk aggregator (with a pure-Python fallback), a Claude Code `PostToolUse` hook, and an MCP server.**
 
-AI coding agents ship diffs faster than reviewers can spot subtle failure modes: hallucinated package imports, empty `...`/`pass`/`NotImplementedError` stubs, `except Exception: pass` swallowing, tautological `assert True` / zero-assertion tests, `eval()` sinks, and dead `onClick={() => {}}` UI buttons. `slopguard` runs deterministically in under a millisecond per file while cleanly exempting `@abstractmethod`, `@overload`, `Protocol`, `.pyi` stubs, and `if TYPE_CHECKING:` blocks.
+AI coding agents can produce diffs faster than reviewers can spot recurring failure patterns: imports that do not resolve, empty `...`/`pass`/`NotImplementedError` stub bodies, `except Exception: pass`, tautological `assert True` or assertion-free tests, `eval()` sinks, and dead `onClick={() => {}}` handlers. `slopguard` flags these deterministically, typically in well under a millisecond per file, and exempts legitimate stubs (`@abstractmethod`, `@overload`, `Protocol`, `.pyi`, `if TYPE_CHECKING:`). It is a small rule-based linter (~1.75k lines of Python plus a ~170-line C++20 kernel), complementary to tests, type checkers and code review — not a replacement for them.
 
 ---
 
@@ -52,6 +52,27 @@ Full artifact: [`benchmarks/real_qwen_slopguard.json`](benchmarks/real_qwen_slop
 | `SG-04` Dead React `onClick={() => {}}` | `tsx` | `BLOCK` (`1` / `72`) | **`PASS`** (`0` / `0`) | `True` | `1494.36 ms` |
 | `SG-05` `eval()` Sink + `NotImplementedError` | `python` | `BLOCK` (`2` / `100`) | **`PASS`** (`0` / `0`) | `True` | `2015.57 ms` |
 | `SG-06` TypeScript `expect(true).toBe(true)` | `typescript` | `BLOCK` (`1` / `85`) | **`PASS`** (`0` / `0`) | `True` | `1191.66 ms` |
+
+## Scope & Limitations
+
+- **Heuristics, not proofs.** Python checks are AST pattern rules; TypeScript/JSX checks are regex/line-based (no TS parser), so they can miss obfuscated cases and can false-positive on unusual formatting. The placeholder-phrase rule (e.g. "todo", "placeholder") is intentionally noisy in UI/text files.
+- **Import resolution depends on the environment.** "Unresolved import" means the module is not in the stdlib, not a workspace module, and not found by `importlib.util.find_spec` in the interpreter running `slopguard`. Run it in the project's own environment, or expect false positives.
+- **Small, self-constructed benchmark.** The live audit is 6 hand-written "sloppy" snippets repaired once by a local `qwen3.5:4b` model at temperature 0. `v2 PASS` means slopguard's own rules no longer fire and the output parses — it does **not** mean the repaired code is functionally correct, and the evaluation is circular by design (it measures whether findings are actionable).
+- **Latency numbers** are single runs of `slopguard demo` on small snippets on one laptop; large files and whole-repo scans will be slower.
+- **Language coverage** is Python and TypeScript/JSX only.
+
+## Install
+
+```bash
+# From PyPI (once published)
+pip install slopguard
+
+# From source (today)
+git clone https://github.com/nagarjunak-pixel/slopguard.git && cd slopguard
+uv sync --all-extras        # or: pip install .
+```
+
+The C++20 prescreener source ([`src/slopguard/_csrc/slopguard_kernels.cpp`](src/slopguard/_csrc/slopguard_kernels.cpp)) ships inside the package and is compiled on first import with `clang++` or `g++` (cached in your temp dir). If no compiler is available, `slopguard` falls back to an equivalent pure-Python implementation. The React audit console (`slopguard serve`) and the recorded benchmark replay need a source checkout.
 
 ---
 
